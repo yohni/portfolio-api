@@ -9,6 +9,7 @@ class ProjectSerializer
       id: project.id,
       title: project.title,
       description: project.description,
+      tech_stack: project.tech_stack,
       user_id: project.user_id,
       created_at: project.created_at,
       updated_at: project.updated_at

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       # Plural `resources` adds GET /api/v1/projects → #index.
       # Singular `resource :projects` does not — GET /projects would hit #show instead.
-      resources :projects, only: %i[index show create]
+      resources :projects, only: %i[index show create update destroy]
     end
   end
 end
