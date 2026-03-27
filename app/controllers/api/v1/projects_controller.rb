@@ -12,7 +12,7 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def index
-    @projects = Project.all
+    @projects = filtered_projects
 
     render json: ProjectSerializer.collection(@projects)
   end
@@ -41,10 +41,18 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:title, :description, tech_stack: [])
+    params.permit(:title, :description, :live_url, :github_url, :thumbnail_url, :position, :featured, tech_stack: [])
   end
 
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  def filtered_projects
+    scope = Project.all
+    scope = scope.where(user_id: params[:user_id]) if params[:user_id].present?
+    scope = scope.where(featured: params[:featured]) if params[:featured].present?
+
+    scope
   end
 end
