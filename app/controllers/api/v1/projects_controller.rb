@@ -1,5 +1,4 @@
 class Api::V1::ProjectsController < ApplicationController
-  allow_unauthenticated_access only: %i[index show]
   before_action :set_project, only: %i[show destroy update]
 
   def create
@@ -45,12 +44,11 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def set_project
-    @project = Project.find(params[:id])
+    @project = current_user.projects.find(params[:id])
   end
 
   def filtered_projects
-    scope = Project.all
-    scope = scope.where(user_id: params[:user_id]) if params[:user_id].present?
+    scope = current_user.projects
     scope = scope.where(featured: params[:featured]) if params[:featured].present?
 
     scope

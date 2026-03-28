@@ -1,14 +1,20 @@
 Rails.application.routes.draw do
-  get "projects/create"
-  get "users/create"
   resource :session, only: [ :create, :destroy ]      # login / logout
-  resources :users, only: [ :create ]                  # signup
+  resources :users, only: [ :create ] do                # signup
+    get :me, on: :collection
+  end
 
   namespace :api do
     namespace :v1 do
       # Plural `resources` adds GET /api/v1/projects → #index.
       # Singular `resource :projects` does not — GET /projects would hit #show instead.
       resources :projects, only: %i[index show create update destroy]
+
+      namespace :public do
+        resources :users, only: [], param: :slug do
+          resources :projects, only: %i[index show], controller: "projects"
+        end
+      end
     end
   end
 end

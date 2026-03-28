@@ -4,15 +4,19 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     if user.save
-      render json: { id: user.id, email: user.email_address }, status: :created
+      render json: { id: user.id, email: user.email_address, slug: user.slug }, status: :created
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
+  def me
+    render json: UserSerializer.one(current_user)
+  end
+
   private
 
   def user_params
-    params.permit(:email_address, :password, :password_confirmation)
+    params.permit(:email_address, :password, :password_confirmation, :slug)
   end
 end

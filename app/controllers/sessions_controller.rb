@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
         user_agent: request.user_agent,
         ip_address: request.remote_ip
       )
-      render json: { token: session.token }, status: :created
+      render json: { token: session.token, slug: user.slug }, status: :created
     else
       render json: { error: "Invalid email address or password" }, status: :unauthorized
     end
