@@ -4,7 +4,7 @@ class Api::V1::ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
     if @project.save
-      render json: ProjectSerializer.one(@project), status: :created
+      render json: { data: ProjectSerializer.one(@project) }, status: :created
     else
       render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
     end
@@ -13,16 +13,19 @@ class Api::V1::ProjectsController < ApplicationController
   def index
     @projects = filtered_projects
 
-    render json: ProjectSerializer.collection(@projects)
+    render json: {
+      data: ProjectSerializer.collection(@projects),
+      pagination: PageSerializer.one(@projects)
+    }
   end
 
   def show
-    render json: ProjectSerializer.one(@project)
+    render json: { data: ProjectSerializer.one(@project) }
   end
 
   def update
     if @project.update(project_params)
-      render json: ProjectSerializer.one(@project), status: :ok
+      render json: { data: ProjectSerializer.one(@project) }, status: :ok
     else
       render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
     end
@@ -49,7 +52,7 @@ class Api::V1::ProjectsController < ApplicationController
 
   def filtered_projects
     scope = current_user.projects
-    scope = scope.where(featured: params[:featured]) if params[:featured].present?
+    scope = scope.order(updated_at: :desc).page(params[:page]).per(params[:per_page] || 20)
 
     scope
   end

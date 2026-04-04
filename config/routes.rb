@@ -10,10 +10,9 @@ Rails.application.routes.draw do
       # Singular `resource :projects` does not — GET /projects would hit #show instead.
       resources :projects, only: %i[index show create update destroy]
 
-      namespace :public do
-        resources :users, only: [], param: :slug do
-          resources :projects, only: %i[index show], controller: "projects"
-        end
+
+      resources :users, only: [], param: :username do
+        resources :projects, only: %i[index show], controller: "users/projects"
       end
     end
   end

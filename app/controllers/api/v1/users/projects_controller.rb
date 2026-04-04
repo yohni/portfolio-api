@@ -1,4 +1,4 @@
-class Api::V1::Public::ProjectsController < ApplicationController
+class Api::V1::Users::ProjectsController < ApplicationController
   allow_unauthenticated_access only: %i[index show]
   before_action :set_user
   before_action :set_project, only: %i[show]
@@ -13,13 +13,13 @@ class Api::V1::Public::ProjectsController < ApplicationController
   end
 
   def show
-    render json: ProjectSerializer.one(@project)
+    render json: { data: ProjectSerializer.one(@project) }
   end
 
   private
 
   def set_user
-    @user = User.find_by!(slug: params[:user_slug])
+    @user = User.find_by!(username: params[:user_username])
   end
 
   def set_project

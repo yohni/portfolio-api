@@ -4,7 +4,7 @@ class UserSerializer
     {
       id: user.id,
       email: user.email_address,
-      slug: user.slug
+      username: user.username
     }
   end
 end
