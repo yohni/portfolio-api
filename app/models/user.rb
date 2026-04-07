@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :projects, dependent: :destroy
+  has_many :experiences, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   normalizes :username, with: ->(s) { s.to_s.strip.downcase.parameterize }

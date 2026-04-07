@@ -34,7 +34,11 @@ gem "image_processing", "~> 1.2"
 
 gem "dotenv-rails", groups: [ :development, :test ]
 
+# pagination
 gem "kaminari"
+
+# formatting dates
+gem "validates_timeliness"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
