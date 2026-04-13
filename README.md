@@ -35,7 +35,7 @@ bin/rails db:migrate
 Start the server and create the user:
 
 ```sh
-curl -X POST 127.1:3000/users -d '{"email_address":"user@example.com","password":"password","password_confirmation":"password","slug":"user"}'
+curl -X POST 127.1:3000/users -d '{"email_address":"user@example.com","password":"password","password_confirmation":"password","username":"user"}'
 ```
 
 Try logging in and get the token:

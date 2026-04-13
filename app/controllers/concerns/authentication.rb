@@ -18,8 +18,13 @@ module Authentication
       token = extract_bearer_token
       session = token && Session.find_by(token: token)
 
-      if session
+      is_expired = session&.expired?
+
+      if session && !is_expired
         Current.session = session
+      elsif is_expired
+        session&.destroy
+        render json: { error: "Session expired" }, status: :unauthorized
       else
         render json: { error: "Unauthorized" }, status: :unauthorized
       end

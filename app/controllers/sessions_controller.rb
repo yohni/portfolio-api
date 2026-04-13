@@ -6,9 +6,9 @@ class SessionsController < ApplicationController
     if user = User.authenticate_by(session_params)
       session = user.sessions.create!(
         user_agent: request.user_agent,
-        ip_address: request.remote_ip
+        ip_address: request.remote_ip,
       )
-      render json: { token: session.token, slug: user.slug }, status: :created
+      render json: { token: session.token, username: user.username, expires_at: session.expires_at }, status: :created
     else
       render json: { error: "Invalid email address or password" }, status: :unauthorized
     end
