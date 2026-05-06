@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_154856) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_16_161159) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_154856) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_experiences_on_user_id"
+  end
+
+  create_table "post_tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "post_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_post_tags_on_post_id"
+    t.index ["tag_id"], name: "index_post_tags_on_tag_id"
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.text "content"
+    t.string "cover_image_url"
+    t.datetime "created_at", null: false
+    t.datetime "published_at"
+    t.string "status", default: "draft"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "views_count", default: 0
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -56,6 +78,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_154856) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "slug"
+    t.datetime "updated_at", null: false
+    t.index ["name", "slug"], name: "index_tags_on_name_and_slug", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -67,6 +97,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_154856) do
   end
 
   add_foreign_key "experiences", "users"
+  add_foreign_key "post_tags", "posts"
+  add_foreign_key "post_tags", "tags"
+  add_foreign_key "posts", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "sessions", "users"
 end
