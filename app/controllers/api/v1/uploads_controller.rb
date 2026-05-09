@@ -26,6 +26,7 @@ class Api::V1::UploadsController < ApplicationController
 
   def destroy
     @upload = Upload.find(params[:id])
+    @upload.file.purge
     if @upload.destroy
       render json: { message: "Upload deleted successfully" }, status: :ok
     else
