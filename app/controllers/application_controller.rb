@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include Authentication
+  include SetActiveStorageUrl
 
   private
 

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :projects, only: %i[index show create update destroy]
       resources :experiences, only: %i[index create show update destroy]
       resources :posts, only: %i[index create show update destroy]
+      resources :uploads, only: %i[create destroy]
 
 
       resources :users, only: [], param: :username do
