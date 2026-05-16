@@ -1,6 +1,5 @@
-class SessionsController < ApplicationController
-  skip_before_action :require_authentication, only: [ :create ]
-
+class Api::V1::SessionsController < ApplicationController
+  allow_unauthenticated_access only: [ :create ]
 
   def create
     if user = User.authenticate_by(session_params)

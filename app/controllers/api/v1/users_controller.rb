@@ -1,5 +1,5 @@
-class UsersController < ApplicationController
-  skip_before_action :require_authentication, only: [ :create ]
+class Api::V1::UsersController < ApplicationController
+  allow_unauthenticated_access only: [ :create ]
 
   def create
     user = User.new(user_params)
@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   end
 
   def me
-    render json: {data: UserSerializer.one(current_user)}
+    render json: { data: UserSerializer.one(current_user) }
   end
 
   private
