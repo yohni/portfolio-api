@@ -1,5 +1,6 @@
 class Api::V1::PostsController < ApplicationController
-  before_action :set_post, only: %i[show update destroy]
+  before_action :set_post, only: %i[show update destroy publish unpublish]
+
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
@@ -29,6 +30,22 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  def publish
+    if @post.publish
+      render json: { data: PostSerializer.one(@post) }, status: :ok
+    else
+      render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def unpublish
+    if @post.unpublish
+      render json: { data: PostSerializer.one(@post) }, status: :ok
+    else
+      render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     if @post.destroy
       render json: { message: "Post deleted successfully" }, status: :ok
@@ -40,7 +57,7 @@ class Api::V1::PostsController < ApplicationController
   private
 
   def post_params
-    params.permit(:title, :content, :cover_image_url, :status, :published_at, :tag_ids)
+    params.permit(:title, :content, :cover_image_url, tag_ids: [])
   end
 
   def set_post
@@ -48,9 +65,6 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def filtered_posts
-    scope = current_user.posts
-    scope = scope.order(updated_at: :desc).page(params[:page]).per(params[:per_page] || 20)
-
-    scope
+    current_user.posts.order(updated_at: :desc).page(params[:page]).per(params[:per_page] || 20)
   end
 end

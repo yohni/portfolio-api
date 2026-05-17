@@ -66,15 +66,16 @@ if Rails.env.development?
       end
 
       rand(2..5).times do
-        published = [ true, false ].sample
         post = user.posts.create!(
           title: Faker::Lorem.sentence(word_count: rand(4..8)).delete("."),
           content: Faker::Lorem.paragraphs(number: rand(2..6)).join("\n\n"),
           cover_image_url: [ Faker::LoremFlickr.image, nil ].sample,
-          status: published ? "published" : "draft",
-          published_at: published ? Faker::Time.between(from: 60.days.ago, to: Time.current) : nil,
           views_count: Faker::Number.between(from: 0, to: 5000)
         )
+        if [ true, false ].sample
+          post.publish
+          post.update_column(:published_at, Faker::Time.between(from: 60.days.ago, to: Time.current))
+        end
         post.tags << tags.sample(rand(1..4))
       end
     end
